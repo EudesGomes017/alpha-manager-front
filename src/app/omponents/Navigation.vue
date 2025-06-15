@@ -32,24 +32,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRoute } from 'vue-router';
-import { RouterLink } from 'vue-router';
-import { Package, BarChart3 } from 'lucide-vue-next'; // Biblioteca equivalente ao lucide-react
-import Button from '@/components/ui/Button.vue'; // Componente Button no padrão Vue
-import { cn } from '@/lib/utils'; // Função de utilidade se desejar manter (opcional)
+import { ref } from "vue";
+import { useRoute } from "vue-router";
+import { RouterLink } from "vue-router";
+import { Package, BarChart3 } from "lucide-vue-next"; // Biblioteca equivalente ao lucide-react
+import Button from "../omponents/ui/Button.vue"; // Componente Button no padrão Vue
 
 const route = useRoute();
 
 const navItems = ref([
   {
-    name: 'Produtos',
-    href: '/',
+    name: "Produtos",
+    href: "/",
     icon: Package,
   },
   {
-    name: 'Dashboard',
-    href: '/dashboard',
+    name: "Dashboard",
+    href: "/dashboard",
     icon: BarChart3,
   },
 ]);
