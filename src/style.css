@@ -1,1 +1,14 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Transição suave para o overlay mobile */
+.sidebar-overlay {
+  transition: opacity 0.3s ease;
+}
+
+/* Ajuste para não sobrepor o navbar */
+aside {
+  top: 64px; /* Altura do seu navbar */
+  height: calc(100vh - 64px);
+}

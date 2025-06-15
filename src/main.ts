@@ -1,8 +1,17 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
-import { router } from './router/router'
+import { createApp } from 'vue';
+import App from './App.vue';
+import { router } from './route';
 
-createApp(App)
-.use(router)
-.mount('#app')
+import { VueQueryPlugin, QueryClient } from '@tanstack/vue-query';
+
+import './style.css'; // Tailwind, etc.
+
+// Instância do TanStack Query (vue-query)
+const queryClient = new QueryClient();
+
+const app = createApp(App);
+
+app.use(router);
+app.use(VueQueryPlugin, { queryClient });
+
+app.mount('#app');
