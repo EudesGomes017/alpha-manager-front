@@ -5,6 +5,13 @@
     <div class="container mx-auto px-6 py-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-4">
+          <button
+            @click="$emit('toggle-sidebar')"
+            class="md:hidden mr-2"
+            aria-label="Abrir menu"
+          >
+            <Menu class="h-5 w-5" />
+          </button>
           <h1 class="text-xl font-bold">
             Projeto <span class="text-primary">ALPHA</span>
           </h1>
@@ -35,8 +42,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
-import { Package, BarChart3 } from "lucide-vue-next";
+import { Package, BarChart3, Menu } from "lucide-vue-next";
 import Button from "./ui/Button.vue";
+defineEmits(["toggle-sidebar"]); // Adicione esta linha
 
 const navItems = ref([
   {
