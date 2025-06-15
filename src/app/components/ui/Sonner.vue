@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { useToast } from "../composables/useToast";
+import { useToast } from "../../omponents/composables/useToast";
 
 const { toasts, removeToast } = useToast();
 </script>

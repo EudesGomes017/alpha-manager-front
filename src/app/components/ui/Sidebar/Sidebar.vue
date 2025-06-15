@@ -1,13 +1,23 @@
 <template>
+  <!-- Overlay para fechar ao clicar fora -->
+  <div
+    v-if="isOpen"
+    class="fixed inset-0 z-40 bg-black/40 md:hidden"
+    @click="toggle"
+  />
+
+  <!-- Sidebar -->
   <aside
-    class="fixed inset-y-0 left-0 z-50 w-64 border-r bg-background transition-transform duration-300"
+    class="fixed inset-y-0 left-0 z-50 w-64 border-r bg-white dark:bg-gray-900 transition-transform duration-300"
     :class="{ '-translate-x-full': !isOpen, 'translate-x-0': isOpen }"
   >
     <div class="flex h-full flex-col p-4">
       <!-- Cabeçalho -->
       <div class="mb-8 flex items-center justify-between">
         <h2 class="text-lg font-semibold">Menu</h2>
-        <SidebarToggle @toggle="toggle" />
+        <button @click="toggle" class="md:hidden" aria-label="Fechar menu">
+          <X class="h-5 w-5" />
+        </button>
       </div>
 
       <!-- Itens do Menu -->
@@ -23,7 +33,7 @@
         </SidebarItem>
       </nav>
 
-      <!-- Rodapé (opcional) -->
+      <!-- Rodapé -->
       <div class="mt-auto pt-4">
         <UserProfileDropdown />
       </div>
@@ -32,8 +42,10 @@
 </template>
 
 <script setup lang="ts">
-import { SidebarToggle, SidebarItem } from "./";
-import UserProfileDropdown from "../UserProfileDropdown.vue";
+import { X } from "lucide-vue-next";
+import type { Component } from "vue";
+
+import { SidebarItem } from "../../ui/Sidebar";
 
 defineProps<{
   isOpen: boolean;
