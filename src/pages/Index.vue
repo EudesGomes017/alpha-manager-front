@@ -169,30 +169,30 @@ import {
   Package,
   AlertCircle,
 } from "lucide-vue-next";
-import ProductModal from "../app/components/ProductModal.vue";
+import ProductModal from "../app/componentsDefaults/ProductModal.vue";
 
-import Button from "../app/components/ui/Button.vue";
-import Input from "../app/components/ui/Input.vue";
-import Label from "../app/components/ui/Label.vue";
-import Card from "../app/components/ui/Card.vue";
-import CardHeader from "@/components/ui/CardHeader.vue";
-import CardContent from "@/components/ui/CardContent.vue";
-import CardTitle from "@/components/ui/CardTitle.vue";
-import CardDescription from "@/components/ui/CardDescription.vue";
-import Badge from "@/components/ui/Badge.vue";
-import Table from "@/components/ui/Table.vue";
-import TableHeader from "@/components/ui/TableHeader.vue";
-import TableBody from "@/components/ui/TableBody.vue";
-import TableRow from "@/components/ui/TableRow.vue";
-import TableHead from "@/components/ui/TableHead.vue";
-import TableCell from "@/components/ui/TableCell.vue";
-import Select from "@/components/ui/Select.vue";
-import SelectTrigger from "@/components/ui/SelectTrigger.vue";
-import SelectValue from "@/components/ui/SelectValue.vue";
-import SelectContent from "@/components/ui/SelectContent.vue";
-import SelectItem from "@/components/ui/SelectItem.vue";
+import Button from "../app/componentsDefaults/ui/Button.vue";
+import Input from "../app/componentsDefaults/ui/Input.vue";
+import Label from "../app/componentsDefaults/ui/Label.vue";
+import Card from "@/app/components/ui/card/Card.vue";
+import CardHeader from "@/app/components/ui/card/CardHeader.vue";
+import CardContent from "@/app/components/ui/card/CardContent.vue";
+import CardTitle from "@/app/components/ui//card/CardTitle.vue";
+import CardDescription from "@/app/components/ui/card/CardDescription.vue";
+import Badge from "@/app/components/ui/badge/Badge.vue";
+import Table from "@/app/components/ui/table/Table.vue";
+import TableHeader from "@/app/components/ui/table/TableHead.vue";
+import TableBody from "@/app/components/ui/table/TableBody.vue";
+import TableRow from "@/app/components/ui/table/TableRow.vue";
+import TableHead from "@/app/components/ui/table/TableHead.vue";
+import TableCell from "@/app/components/ui/table/TableCell.vue";
+import Select from "@/app/components/ui/select/Select.vue";
+import SelectTrigger from "@/app/components/ui/select/SelectTrigger.vue";
+import SelectValue from "@/app/components/ui/select/SelectValue.vue";
+import SelectContent from "@/app/components/ui/select/SelectContent.vue";
+import SelectItem from "@/app/components/ui/select/SelectItem.vue";
 
-import { useProducts } from "../app/components/composables/useProducts";
+import { useProducts } from "@/app/componentsDefaults/composables/useProducts";
 
 const isModalOpen = ref(false);
 const editingProduct = ref(null);

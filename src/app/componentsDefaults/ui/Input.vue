@@ -4,7 +4,7 @@
     :type="type || 'text'"
     :step="step"
     :placeholder="placeholder"
-    :class="['base-input', class]"
+    :class="['base-input', customClass]"
     :value="modelValue"
     @input="event => emit('update:modelValue', (event.target as HTMLInputElement).value)"
   />
@@ -17,7 +17,7 @@ defineProps<{
   id?: string;
   type?: string;
   step?: string;
-  class?:
+  customClass?:
     | string
     | Record<string, boolean>
     | (string | Record<string, boolean>)[];
