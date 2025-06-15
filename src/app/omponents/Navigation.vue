@@ -5,20 +5,21 @@
     <div class="container mx-auto px-6 py-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-4">
-          <h1 class="text-xl font-bold">Projeto ALPHA</h1>
+          <h1 class="text-xl font-bold">
+            Projeto <span class="text-primary">ALPHA</span>
+          </h1>
         </div>
         <div class="flex items-center space-x-2">
           <RouterLink
             v-for="item in navItems"
             :key="item.name"
             :to="item.href"
-            class="flex items-center space-x-2"
-            :class="{
-              'bg-primary text-primary-foreground': route.path === item.href,
-            }"
+            custom
+            v-slot="{ isActive, navigate }"
           >
             <Button
-              :variant="route.path === item.href ? 'default' : 'ghost'"
+              :variant="isActive ? 'default' : 'ghost'"
+              @click="navigate"
               class="flex items-center space-x-2"
             >
               <component :is="item.icon" class="h-4 w-4" />
@@ -33,12 +34,9 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRoute } from "vue-router";
 import { RouterLink } from "vue-router";
-import { Package, BarChart3 } from "lucide-vue-next"; // Biblioteca equivalente ao lucide-react
-import Button from "../omponents/ui/Button.vue"; // Componente Button no padrão Vue
-
-const route = useRoute();
+import { Package, BarChart3 } from "lucide-vue-next";
+import Button from "./ui/Button.vue";
 
 const navItems = ref([
   {
