@@ -9,6 +9,7 @@
     <div class="flex flex-col flex-1">
       <Navigation @toggle-sidebar="toggleSidebar" />
     </div>
+    
   </div>
 </template>
 
@@ -16,7 +17,7 @@
 import { ref, h } from "vue";
 //import { RouterView } from "vue-router";
 
-import Navigation from "./app/components/ui/Navigation.vue";
+import Navigation from './app/components/Navigation.vue'
 import Sidebar from "./app/components/ui/Sidebar/Sidebar.vue";
 
 const isSidebarOpen = ref(false);

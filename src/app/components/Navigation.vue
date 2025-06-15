@@ -43,7 +43,7 @@
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import { Package, BarChart3, Menu } from "lucide-vue-next";
-import Button from "./Button.vue";
+import Button from "./ui/Button.vue";
 defineEmits(["toggle-sidebar"]); // Adicione esta linha
 
 const navItems = ref([
