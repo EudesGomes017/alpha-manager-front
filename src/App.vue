@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen flex flex-col">
     <Navigation />
-    <RouterView class="flex-1" />
   </div>
+  <RouterView class="flex-1" />
 </template>
 
 <script setup lang="ts">
