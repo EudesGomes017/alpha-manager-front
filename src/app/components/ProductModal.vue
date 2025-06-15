@@ -4,7 +4,7 @@
       <DialogHeader>
         <DialogTitle class="flex items-center space-x-2">
           <Camera class="h-5 w-5" />
-          <span>{{ product ? 'Editar Produto' : 'Novo Produto' }}</span>
+          <span>{{ product ? "Editar Produto" : "Novo Produto" }}</span>
         </DialogTitle>
       </DialogHeader>
 
@@ -20,7 +20,9 @@
                 :class="{ 'border-red-500': errors.name }"
                 placeholder="Ex: Smartphone Galaxy S24"
               />
-              <p v-if="errors.name" class="text-sm text-red-500 mt-1">{{ errors.name }}</p>
+              <p v-if="errors.name" class="text-sm text-red-500 mt-1">
+                {{ errors.name }}
+              </p>
             </div>
 
             <div>
@@ -33,7 +35,9 @@
                 :class="{ 'border-red-500': errors.price }"
                 placeholder="Ex: 899.99"
               />
-              <p v-if="errors.price" class="text-sm text-red-500 mt-1">{{ errors.price }}</p>
+              <p v-if="errors.price" class="text-sm text-red-500 mt-1">
+                {{ errors.price }}
+              </p>
             </div>
 
             <div>
@@ -46,7 +50,9 @@
                 placeholder="Ex: 7891234567890"
               />
               <p class="text-xs text-gray-500 mt-1">13 dígitos numéricos</p>
-              <p v-if="errors.barcode" class="text-sm text-red-500 mt-1">{{ errors.barcode }}</p>
+              <p v-if="errors.barcode" class="text-sm text-red-500 mt-1">
+                {{ errors.barcode }}
+              </p>
             </div>
 
             <div>
@@ -56,7 +62,9 @@
                 v-model="formData.image"
                 placeholder="https://exemplo.com/imagem.jpg"
               />
-              <p class="text-xs text-gray-500 mt-1">Cole o link de uma imagem online</p>
+              <p class="text-xs text-gray-500 mt-1">
+                Cole o link de uma imagem online
+              </p>
             </div>
           </div>
 
@@ -65,7 +73,9 @@
             <div>
               <Label>Imagem do Produto</Label>
               <div class="space-y-3">
-                <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-dashed border-gray-300">
+                <div
+                  class="aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-dashed border-gray-300"
+                >
                   <img
                     v-if="imagePreview"
                     :src="imagePreview"
@@ -83,6 +93,7 @@
 
                 <div class="relative">
                   <input
+                    ref="imageUpload"
                     type="file"
                     id="imageUpload"
                     accept="image/*"
@@ -92,7 +103,7 @@
                   <Button
                     type="button"
                     variant="outline"
-                    @click="() => $refs.imageUpload.click()"
+                    @click="triggerImageUpload"
                     class="w-full"
                   >
                     <Upload class="h-4 w-4 mr-2" />
@@ -117,7 +128,9 @@
         </div>
 
         <div class="bg-green-50 p-4 rounded-lg border border-green-200">
-          <h4 class="font-medium text-green-900 mb-2">Integração Backend C# API</h4>
+          <h4 class="font-medium text-green-900 mb-2">
+            Integração Backend C# API
+          </h4>
           <div class="text-sm text-green-700 space-y-1">
             <p>• Dados salvos no SQL Server via .NET Core API</p>
             <p>• Integração automática com Fake Store API</p>
@@ -127,11 +140,11 @@
         </div>
 
         <div class="flex justify-end space-x-3 pt-4 border-t">
-          <Button type="button" variant="outline" @click="onClose">
-            Cancelar
-          </Button>
+          <Button type="button" variant="outline" @click="onClose"
+            >Cancelar</Button
+          >
           <Button type="submit" class="bg-blue-600 hover:bg-blue-700">
-            {{ product ? 'Atualizar' : 'Cadastrar' }} Produto
+            {{ product ? "Atualizar" : "Cadastrar" }} Produto
           </Button>
         </div>
       </form>
@@ -140,16 +153,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, reactive } from 'vue';
-import { Camera, Upload, X } from 'lucide-vue-next';
-import Button from '@/components/ui/Button.vue';
-import Input from '@/components/ui/Input.vue';
-import Label from '@/components/ui/Label.vue';
-import Dialog from '@/components/ui/Dialog.vue';
-import DialogContent from '@/components/ui/DialogContent.vue';
-import DialogHeader from '@/components/ui/DialogHeader.vue';
-import DialogTitle from '@/components/ui/DialogTitle.vue';
-import { useToast } from '@/composables/useToast';
+import { ref, reactive, watch } from "vue";
+import { Camera, Upload, X } from "lucide-vue-next";
+import Dialog from "./ui/Dialog.vue";
+import DialogContent from "./ui/DialogContent.vue";
+import DialogHeader from "./ui/DialogHeader.vue";
+import DialogTitle from "./ui/DialogTitle.vue";
+import Input from "./ui/Input.vue";
+import Label from "./ui/Label.vue";
+import Button from "./ui/Button.vue";
+import { useToast } from "./composables/useToast";
 
 interface Product {
   id: number;
@@ -163,23 +176,23 @@ interface Product {
 interface ProductModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (product: Omit<Product, 'id' | 'createdAt'>) => void;
+  onSave: (product: Omit<Product, "id" | "createdAt">) => void;
   product: Product | null;
 }
 
 const props = defineProps<ProductModalProps>();
-
 const { addToast } = useToast();
 
 const formData = reactive({
-  name: '',
-  price: '',
-  barcode: '',
-  image: '',
+  name: "",
+  price: "",
+  barcode: "",
+  image: "",
 });
 
 const errors = reactive<Record<string, string>>({});
-const imagePreview = ref('');
+const imagePreview = ref("");
+const imageUpload = ref<HTMLInputElement | null>(null);
 
 watch(
   () => props.product,
@@ -191,34 +204,27 @@ watch(
       formData.image = newProduct.image;
       imagePreview.value = newProduct.image;
     } else {
-      formData.name = '';
-      formData.price = '';
-      formData.barcode = '';
-      formData.image = '';
-      imagePreview.value = '';
+      formData.name = "";
+      formData.price = "";
+      formData.barcode = "";
+      formData.image = "";
+      imagePreview.value = "";
     }
-    Object.keys(errors).forEach((key) => (errors[key] = ''));
+    Object.keys(errors).forEach((key) => (errors[key] = ""));
   },
   { immediate: true }
 );
 
 const validateForm = () => {
   const newErrors: Record<string, string> = {};
-
-  if (!formData.name.trim()) {
-    newErrors.name = 'Nome do produto é obrigatório';
-  }
-
-  if (!formData.price || parseFloat(formData.price) <= 0) {
-    newErrors.price = 'Preço deve ser maior que zero';
-  }
-
+  if (!formData.name.trim()) newErrors.name = "Nome do produto é obrigatório";
+  if (!formData.price || parseFloat(formData.price) <= 0)
+    newErrors.price = "Preço deve ser maior que zero";
   if (!formData.barcode.trim()) {
-    newErrors.barcode = 'Código de barras é obrigatório';
+    newErrors.barcode = "Código de barras é obrigatório";
   } else if (!/^\d{13}$/.test(formData.barcode)) {
-    newErrors.barcode = 'Código de barras deve ter 13 dígitos';
+    newErrors.barcode = "Código de barras deve ter 13 dígitos";
   }
-
   Object.assign(errors, newErrors);
   return Object.keys(newErrors).length === 0;
 };
@@ -226,9 +232,9 @@ const validateForm = () => {
 const handleSubmit = () => {
   if (!validateForm()) {
     addToast({
-      title: 'Erro de validação',
-      description: 'Por favor, corrija os campos obrigatórios.',
-      type: 'error',
+      title: "Erro de validação",
+      description: "Por favor, corrija os campos obrigatórios.",
+      type: "error",
     });
     return;
   }
@@ -237,7 +243,8 @@ const handleSubmit = () => {
     name: formData.name.trim(),
     price: parseFloat(formData.price),
     barcode: formData.barcode.trim(),
-    image: imagePreview.value || 'https://via.placeholder.com/300?text=Sem+Imagem',
+    image:
+      imagePreview.value || "https://via.placeholder.com/300?text=Sem+Imagem",
   };
 
   props.onSave(productData);
@@ -248,13 +255,12 @@ const handleImageChange = (e: Event) => {
   if (file) {
     if (file.size > 5 * 1024 * 1024) {
       addToast({
-        title: 'Arquivo muito grande',
-        description: 'A imagem deve ter no máximo 5MB.',
-        type: 'error',
+        title: "Arquivo muito grande",
+        description: "A imagem deve ter no máximo 5MB.",
+        type: "error",
       });
       return;
     }
-
     const reader = new FileReader();
     reader.onload = (event) => {
       const result = event.target?.result as string;
@@ -266,7 +272,11 @@ const handleImageChange = (e: Event) => {
 };
 
 const removeImage = () => {
-  imagePreview.value = '';
-  formData.image = '';
+  imagePreview.value = "";
+  formData.image = "";
+};
+
+const triggerImageUpload = () => {
+  imageUpload.value?.click();
 };
 </script>
