@@ -71,13 +71,14 @@
             <Package class="h-5 w-5" />
             Lista de Produtos
           </div>
-          <Badge variant="secondary">
-            {{ totalCount }} produto<span v-if="totalCount !== 1">s</span>
+          <Badge variant="secondary"
+            >{{ productStore.totalCount }} produtos
           </Badge>
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div v-if="isLoading" class="space-y-4 animate-pulse">
+        <!-- Loading -->
+        <div v-if="productStore.isLoading" class="space-y-4 animate-pulse">
           <div v-for="i in 5" :key="i" class="flex space-x-4">
             <div class="h-4 bg-gray-200 rounded w-full" />
             <div class="h-4 bg-gray-200 rounded w-24" />
@@ -86,13 +87,21 @@
           </div>
         </div>
 
-        <div v-else-if="error" class="text-center py-8 text-red-600">
+        <!-- Erro -->
+        <div
+          v-else-if="productStore.error"
+          class="text-center py-8 text-red-600"
+        >
           <AlertCircle class="h-12 w-12 mx-auto mb-4" />
           <h3 class="text-lg font-semibold mb-2">Erro ao carregar produtos</h3>
           <p>Verifique se a API está disponível.</p>
         </div>
 
-        <div v-else-if="products.length === 0" class="text-center py-8">
+        <!-- Lista vazia -->
+        <div
+          v-else-if="productStore.products.length === 0"
+          class="text-center py-8"
+        >
           <Package class="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h3 class="text-lg font-semibold mb-2">Nenhum produto encontrado</h3>
           <p class="text-gray-600 mb-4">Cadastre seu primeiro produto.</p>
@@ -102,6 +111,7 @@
           </Button>
         </div>
 
+        <!-- Lista com produtos -->
         <Table v-else>
           <TableHeader>
             <TableRow>
@@ -113,7 +123,10 @@
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="product in products" :key="product.id">
+            <TableRow
+              v-for="product in productStore.products"
+              :key="product.id"
+            >
               <TableCell>
                 <img
                   :src="product.image"
@@ -160,7 +173,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, watch } from "vue";
 import {
   Plus,
   Search,
@@ -169,15 +182,17 @@ import {
   Package,
   AlertCircle,
 } from "lucide-vue-next";
+
 import ProductModal from "../app/componentsDefaults/ProductModal.vue";
 
+// UI Components
 import Button from "../app/componentsDefaults/ui/Button.vue";
 import Input from "../app/componentsDefaults/ui/Input.vue";
 import Label from "../app/componentsDefaults/ui/Label.vue";
 import Card from "@/app/components/ui/card/Card.vue";
 import CardHeader from "@/app/components/ui/card/CardHeader.vue";
 import CardContent from "@/app/components/ui/card/CardContent.vue";
-import CardTitle from "@/app/components/ui//card/CardTitle.vue";
+import CardTitle from "@/app/components/ui/card/CardTitle.vue";
 import CardDescription from "@/app/components/ui/card/CardDescription.vue";
 import Badge from "@/app/components/ui/badge/Badge.vue";
 import Table from "@/app/components/ui/table/Table.vue";
@@ -192,11 +207,15 @@ import SelectValue from "@/app/components/ui/select/SelectValue.vue";
 import SelectContent from "@/app/components/ui/select/SelectContent.vue";
 import SelectItem from "@/app/components/ui/select/SelectItem.vue";
 
-import { useProducts } from "@/app/componentsDefaults/composables/useProducts";
+// Pinia store
+import { useProductStore } from "@/stores/productStore";
+const productStore = useProductStore();
 
+// Modal state
 const isModalOpen = ref(false);
 const editingProduct = ref(null);
 
+// Filtros
 const filters = ref({
   name: "",
   barcode: "",
@@ -205,18 +224,28 @@ const filters = ref({
   pageSize: 10,
 });
 
-const {
-  products,
-  totalCount,
-  isLoading,
-  error,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-} = useProducts(filters);
+// Fetch inicial
+onMounted(() => {
+  productStore.fetchProducts(filters.value);
+});
 
+// Refetch on filters change
+watch(
+  filters,
+  () => {
+    productStore.fetchProducts(filters.value);
+  },
+  { deep: true }
+);
+
+// Ações
 const handleSearch = () => {
-  filters.value.page = 1;
+  filters.value.page = 1; // Reinicia a paginação
+};
+
+const openNewProductModal = () => {
+  editingProduct.value = null;
+  isModalOpen.value = true;
 };
 
 const editProduct = (product: any) => {
@@ -224,29 +253,25 @@ const editProduct = (product: any) => {
   isModalOpen.value = true;
 };
 
-const deleteProductHandler = (id: number) => {
-  if (confirm("Deseja realmente excluir?")) {
-    deleteProduct(id);
+const deleteProduct = (id: number) => {
+  if (confirm("Deseja realmente excluir este produto?")) {
+    productStore.deleteProduct(id);
   }
+};
+
+const handleSaveProduct = (product: any) => {
+  if (editingProduct.value) {
+    productStore.updateProduct({ ...product, id: editingProduct.value.id });
+  } else {
+    productStore.createProduct(product);
+  }
+  isModalOpen.value = false;
+  editingProduct.value = null;
 };
 
 const handleModalClose = () => {
   isModalOpen.value = false;
   editingProduct.value = null;
-};
-
-const handleSaveProduct = (product: any) => {
-  if (editingProduct.value) {
-    updateProduct({ ...product, id: editingProduct.value.id });
-  } else {
-    createProduct(product);
-  }
-  handleModalClose();
-};
-
-const openNewProductModal = () => {
-  editingProduct.value = null;
-  isModalOpen.value = true;
 };
 
 const handleImageError = (e: Event) => {
