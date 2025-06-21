@@ -1,8 +1,7 @@
-// src/stores/productStore.ts
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { Product, ProductFilters } from '../types/api'
-import api from '../services/api'
+import productService from '../services/productService'
 import { useToast } from '../app/componentsDefaults/composables/useToast'
 
 export const useProductStore = defineStore('product', () => {
@@ -13,16 +12,19 @@ export const useProductStore = defineStore('product', () => {
 
     const { addToast } = useToast()
 
-    const fetchProducts = async (filters: ProductFilters) => {
+    // 🔍 Buscar Produtos
+    const fetchProducts = async (filters?: ProductFilters) => {
         isLoading.value = true
         error.value = null
 
         try {
-            const { data } = await api.get('/products', { params: filters })
-            products.value = data.items
-            totalCount.value = data.totalCount
+            const data = await productService.getProducts(filters)
+            products.value = data // ✅ Seu backend retorna array
+            totalCount.value = data.length
         } catch (err: any) {
             error.value = err
+            products.value = []
+            totalCount.value = 0
             addToast({
                 title: 'Erro ao carregar produtos',
                 description: err.message,
@@ -33,22 +35,36 @@ export const useProductStore = defineStore('product', () => {
         }
     }
 
-    const createProduct = async (product: Omit<Product, 'id' | 'createdAt'>) => {
-        const { data } = await api.post('/products', product)
+    // 🔄 Sincronizar com Fake Store
+    const syncProducts = async () => {
+        try {
+            await productService.syncFromFakeStore()
+            await fetchProducts() // ✅ Atualiza após sync
+            addToast({ title: 'Sincronização concluída', type: 'success' })
+        } catch (err) {
+            addToast({ title: 'Erro na sincronização', type: 'error' })
+        }
+    }
+
+    // 🆕 Criar Produto
+    const createProduct = async (product: Omit<Product, 'id'>) => {
+        const data = await productService.createProduct(product)
         products.value.unshift(data)
         totalCount.value++
         addToast({ title: 'Produto criado com sucesso', type: 'success' })
     }
 
+    // 🔁 Atualizar Produto
     const updateProduct = async (product: Product) => {
-        await api.put(`/products/${product.id}`, product)
+        await productService.updateProduct(product)
         const index = products.value.findIndex(p => p.id === product.id)
         if (index !== -1) products.value[index] = product
         addToast({ title: 'Produto atualizado', type: 'success' })
     }
 
+    // ❌ Deletar Produto
     const deleteProduct = async (id: number) => {
-        await api.delete(`/products/${id}`)
+        await productService.deleteProduct(id.toString())
         products.value = products.value.filter(p => p.id !== id)
         totalCount.value--
         addToast({ title: 'Produto excluído', type: 'success' })
@@ -60,6 +76,7 @@ export const useProductStore = defineStore('product', () => {
         isLoading,
         error,
         fetchProducts,
+        syncProducts,
         createProduct,
         updateProduct,
         deleteProduct,

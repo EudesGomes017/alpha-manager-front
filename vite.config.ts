@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import path from 'path';
 
 export default defineConfig(({ mode }) => {
-  // Carrega variáveis de ambiente com base no modo
+  // Carrega variáveis de ambiente
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
@@ -13,11 +13,26 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, 'src'),
       },
     },
-    define: {
-      // Garante que o Vite reconheça as variáveis como import.meta.env
-      'import.meta.env': {
-        ...env,
-      },
+    server: {
+      port: 5173,
+      proxy: {
+        // Configura proxy para evitar problemas de CORS em desenvolvimento
+        '/api': {
+          target: env.VITE_API_BASE_URL || 'https://localhost:44356',
+          changeOrigin: true,
+          secure: false, // Ignora certificado SSL em desenvolvimento
+          rewrite: (path) => path.replace(/^\/api/, '/api/v1')
+        }
+      }
     },
+    define: {
+      'process.env': {},
+      'import.meta.env': JSON.stringify(env)
+    },
+    build: {
+      outDir: 'dist',
+      assetsDir: 'assets',
+      sourcemap: mode !== 'production'
+    }
   };
 });

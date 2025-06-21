@@ -24,7 +24,7 @@
           Filtros
         </CardTitle>
         <CardDescription>
-          Use os filtros abaixo para encontrar produtos específicos
+          Use os filtros abaixo para encontrar produtos específicos.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -41,7 +41,7 @@
             <Label>Ordenar por</Label>
             <Select v-model="filters.sortBy">
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue placeholder="Selecione" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="price_asc"
@@ -72,8 +72,8 @@
             Lista de Produtos
           </div>
           <Badge variant="secondary"
-            >{{ productStore.totalCount }} produtos
-          </Badge>
+            >{{ productStore.products.length }} produtos</Badge
+          >
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -112,52 +112,57 @@
         </div>
 
         <!-- Lista com produtos -->
-        <Table v-else>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Imagem</TableHead>
-              <TableHead>Nome</TableHead>
-              <TableHead>Preço</TableHead>
-              <TableHead>Código</TableHead>
-              <TableHead>Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow
+        <Table class="w-full table-auto">
+          <thead>
+            <tr class="border-b">
+              <th class="px-4 py-2 text-left">Imagem</th>
+              <th class="px-4 py-2 text-left">Nome</th>
+              <th class="px-4 py-2 text-left">Preço</th>
+              <th class="px-4 py-2 text-left">Código de Barras</th>
+              <th class="px-4 py-2 text-left">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
               v-for="product in productStore.products"
               :key="product.id"
+              class="border-b hover:bg-gray-50"
             >
-              <TableCell>
+              <td class="px-4 py-2">
                 <img
                   :src="product.image"
-                  alt=""
+                  alt="Imagem"
                   class="w-12 h-12 rounded object-cover"
-                  @error="handleImageError($event)"
+                  @error="handleImageError"
                 />
-              </TableCell>
-              <TableCell class="font-medium">{{ product.name }}</TableCell>
-              <TableCell>R$ {{ product.price.toFixed(2) }}</TableCell>
-              <TableCell>{{ product.barcode }}</TableCell>
-              <TableCell>
+              </td>
+              <td class="px-4 py-2 font-medium">
+                {{ product.name }}
+              </td>
+              <td class="px-4 py-2">R$ {{ product.price.toFixed(2) }}</td>
+              <td class="px-4 py-2">
+                {{ product.barcode }}
+              </td>
+              <td class="px-4 py-2">
                 <div class="flex gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     @click="editProduct(product)"
                   >
-                    <Edit class="h-4 w-4" />
+                    ✏️
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     @click="deleteProduct(product.id)"
                   >
-                    <Trash2 class="h-4 w-4" />
+                    🗑️
                   </Button>
                 </div>
-              </TableCell>
-            </TableRow>
-          </TableBody>
+              </td>
+            </tr>
+          </tbody>
         </Table>
       </CardContent>
     </Card>
@@ -208,7 +213,7 @@ import SelectContent from "@/app/components/ui/select/SelectContent.vue";
 import SelectItem from "@/app/components/ui/select/SelectItem.vue";
 
 // Pinia store
-import { useProductStore } from "@/stores/productStore";
+import { useProductStore } from "../stores/productStore";
 const productStore = useProductStore();
 
 // Modal state
@@ -240,7 +245,7 @@ watch(
 
 // Ações
 const handleSearch = () => {
-  filters.value.page = 1; // Reinicia a paginação
+  filters.value.page = 1;
 };
 
 const openNewProductModal = () => {
