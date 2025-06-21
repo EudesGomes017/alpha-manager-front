@@ -19,7 +19,7 @@ export const useProductStore = defineStore('product', () => {
 
         try {
             const data = await productService.getProducts(filters)
-            products.value = data // ✅ Seu backend retorna array
+            products.value = data
             totalCount.value = data.length
         } catch (err: any) {
             error.value = err
@@ -39,7 +39,7 @@ export const useProductStore = defineStore('product', () => {
     const syncProducts = async () => {
         try {
             await productService.syncFromFakeStore()
-            await fetchProducts() // ✅ Atualiza após sync
+            await fetchProducts()
             addToast({ title: 'Sincronização concluída', type: 'success' })
         } catch (err) {
             addToast({ title: 'Erro na sincronização', type: 'error' })
@@ -48,10 +48,23 @@ export const useProductStore = defineStore('product', () => {
 
     // 🆕 Criar Produto
     const createProduct = async (product: Omit<Product, 'id'>) => {
-        const data = await productService.createProduct(product)
-        products.value.unshift(data)
-        totalCount.value++
-        addToast({ title: 'Produto criado com sucesso', type: 'success' })
+        try {
+            const data = await productService.createProduct(product)
+            await fetchProducts()
+            const exists = products.value.find(p => p.id === data.id)
+            if (!exists) {
+                products.value.unshift(data)
+                totalCount.value++
+            }
+            addToast({ title: 'Produto criado com sucesso', type: 'success' })
+        } catch (err: any) {
+            error.value = err
+            addToast({
+                title: 'Erro ao criar produto',
+                description: err.message,
+                type: 'error',
+            })
+        }
     }
 
     // 🔁 Atualizar Produto
@@ -65,6 +78,7 @@ export const useProductStore = defineStore('product', () => {
     // ❌ Deletar Produto
     const deleteProduct = async (id: number) => {
         await productService.deleteProduct(id.toString())
+        await fetchProducts()
         products.value = products.value.filter(p => p.id !== id)
         totalCount.value--
         addToast({ title: 'Produto excluído', type: 'success' })
