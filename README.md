@@ -119,6 +119,5 @@ Ao cadastrar ou atualizar um produto, os dados são enviados também para:
 
 ---
 
-## 📄 Licença
-
-MIT – Sinta-se livre para usar e adaptar este projeto para seus próprios fins.
+✨ Créditos
+Desenvolvido por [Eudes Gomes] 🚀
