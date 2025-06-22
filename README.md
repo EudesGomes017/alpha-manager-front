@@ -66,7 +66,7 @@ src/
 ### 1. Pré-requisitos
 
 - Node.js `^18.x`
-- API rodando localmente em `.NET` (ex: https://localhost:7001)
+- API rodando localmente em `.NET` (ex:https://localhost:44356/swagger)
 - Variáveis `.env` com `VITE_API_URL`
 
 ### 2. Instalar dependências
