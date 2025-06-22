@@ -2,7 +2,7 @@
 
 Aplicação frontend para **gestão de produtos** com integração a uma API .NET e Fake Store API. Desenvolvido com Vue 3, seguindo princípios de arquitetura limpa, boas práticas de composição e UI moderna com Tailwind + ShadCN-Vue.
 
-![frontGif](D:\Projeto VueJs\alpha-manager-front\frontGif.gif)
+![Demonstração Frontend](frontGif.gif)
 
 ---
 
