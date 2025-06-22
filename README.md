@@ -84,7 +84,7 @@ npm run dev
 ### 4. Estrutura de `.env`
 
 ```env
-VITE_API_URL=https://localhost:7001/api
+VITE_API_URL=https://localhost:44356/api
 ```
 
 ---
