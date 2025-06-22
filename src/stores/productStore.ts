@@ -70,6 +70,7 @@ export const useProductStore = defineStore('product', () => {
     // 🔁 Atualizar Produto
     const updateProduct = async (product: Product) => {
         await productService.updateProduct(product)
+        await fetchProducts()
         const index = products.value.findIndex(p => p.id === product.id)
         if (index !== -1) products.value[index] = product
         addToast({ title: 'Produto atualizado', type: 'success' })
