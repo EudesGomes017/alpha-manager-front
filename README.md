@@ -54,7 +54,7 @@ src/
 | Frontend     | Vue 3, Vite, TypeScript                          |
 | UI           | Tailwind CSS, ShadCN-Vue                         |
 | State Mgmt   | Pinia                                            |
-| API          | Axios, .NET 8+ backend                           |
+| API          | Axios, .NET 9 backend                           |
 | UX/UI        | Headless UI, Dialogs, Toasts                     |
 | Validação    | Validação reativa com Composition API           |
 | SEO (Nuxt)   | Suporte opcional com SSR ou SSG (via Nuxt 3)    |
