@@ -131,10 +131,10 @@
 import { ref, computed, onMounted } from "vue";
 import DashboardCard from "@/app/componentsDefaults/DashboardCard.vue";
 import ChartCard from "@/app/componentsDefaults/ChartCard.vue";
-import Tabs from "@/app/componentsDefaults/ui/Tabs.vue";
-import TabsList from "@/app/componentsDefaults/ui/TabsList.vue";
+import Tabs from "../app/componentsDefaults/ui/Tabs.vue";
+import TabsList from "../app/componentsDefaults/ui/TabsList.vue";
 import TabsTrigger from "../app/componentsDefaults/ui/TabsTrigger.vue";
-import TabsContent from "../app/componentsDefaults/ui/";
+import TabsContent from "../app/componentsDefaults/ui/TabsContent.vue";
 import Navigation from "../app/componentsDefaults/Navigation.vue";
 
 // UI Components
